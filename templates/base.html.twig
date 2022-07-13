@@ -38,12 +38,16 @@
         <!-- Page Content -->
         <div class="container">
             <div class="row">
-                <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
+
                 <a href="{{ path('task_list') }}" class="btn btn-success">Liste des taches</a>
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
                 {% else %}
                     <a href="{{ path('login') }}" class="btn btn-success">Se connecter</a>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
+                    <a href="{{ path('user_list') }}" class="btn btn-primary">Liste des utilisateurs</a>
                 {% endif %}
             </div>
 
