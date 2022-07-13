@@ -20,21 +20,32 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 
 /**
  * @Route("/security")
  */
 class SecurityController extends AbstractController
 {
-    public function __construct(UserRepository $userRepository, RouterInterface $router)
+    use TargetPathTrait;
+
+    public const LOGIN_ROUTE = 'login_check';
+
+    private $urlGenerator;
+    
+    public function __construct(UserRepository $userRepository, RouterInterface $router, UrlGeneratorInterface $urlGenerator)
     {
-        $this->userRepository = $userRepository;
-        $this->router = $router;
+        // $this->userRepository = $userRepository;
+        // $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function supports(Request $request): ?bool
     {
-        return ($request->getPathInfo() === '/login' && $request->isMethod('POST'));
+        return ($request->getPathInfo() === '/login_check' && $request->isMethod('POST'));
     }
 
     /**
@@ -47,38 +58,30 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', array(
+        return $this->render('securityfirst/login.html.twig', array(
             'last_username' => "tst",
             'error'         => $error,
         ));
     }
 
     /**
-     * @Route("/login_check", name="login_check")
+     * @Route("/login_check", name="login_check", methods={"POST"})
      */
     public function loginCheck(Request $request): PassportInterface
     {
-        $userName = $request->request->get('username');
+        // dd("test");
         $password = $request->request->get('password');
         // dd("test");
+        $username = $request->request->get('username');
+        
+        $request->getSession()->set(Security::LAST_USERNAME, $username);
+
         return new Passport(
-            new UserBadge($userName, function($userIdentifier) {
-                // optionally pass a callback to load the User manually
-                $user = $this->userRepository->findOneBy(['userName' => $userIdentifier]);
-
-                if (!$user) {
-                    throw new UserNotFoundException();
-                }
-                $getValidate = $user->getValidate();
-                if($getValidate != 0){
-                    return $user;
-                }
-            }),
-            new CustomCredentials(function($credentials, User $user) {
-
-                $getPassword = $user->getPassword();
-                return password_verify($credentials, $getPassword);
-            }, $password)
+            new UserBadge($username),
+            new PasswordCredentials($request->request->get('password')),
+            [
+                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
+            ]
         );
     }
 
@@ -92,17 +95,18 @@ class SecurityController extends AbstractController
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        dd("it works");
+        dd("success");
         return new RedirectResponse(
             $this->router->generate('main')
         );
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
-    {
+    { 
+        dd("error");
         $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
         return new RedirectResponse(
-            $this->router->generate('app_login')
+            $this->router->generate('login')
         );
     }
 }
