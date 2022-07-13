@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,16 +27,13 @@ class UserType extends AbstractType
             ])
             ->add('email', EmailType::class, ['label' => 'Adresse email'])
             ->add('roles', CollectionType::class, [
-                'entry_type'   => ChoiceType::class,
+                'entry_type'  => ChoiceType::class,
                 'entry_options'  => [
                     'label' => false,
                     'choices' => [ 
                         'User' => 'ROLE_USER',
                         'Admin' => 'ROLE_ADMIN',
                     ],
-                    'attr'=>[
-                        'class'=>'d-none'
-                    ]
                 ],
             ])
         ;

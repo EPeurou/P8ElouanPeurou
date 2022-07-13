@@ -13,6 +13,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/security")
@@ -24,7 +25,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="login")
      */
-    public function loginAction(Request $request, AuthenticationUtils $authenticationUtils)
+    public function loginAction(Request $request, AuthenticationUtils $authenticationUtils,TranslatorInterface $translatorInterface)
     {
         // $authenticationUtils = $this->container->get('security.authentication_utils');
         $user = $this->getUser();
@@ -34,7 +35,7 @@ class SecurityController extends AbstractController
         }
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-
+        // $translatedError = $translatorInterface->trans($error);
         return $this->render('securityfirst/login.html.twig', array(
             'last_username' => $lastUsername,
             'error'         => $error,
