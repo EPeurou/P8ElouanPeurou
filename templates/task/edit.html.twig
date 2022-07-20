@@ -4,7 +4,7 @@
     <div class="row">
         {{ form_start(form, {'action' : path('task_edit', { 'id' : task.id })}) }}
             {{ form_widget(form) }}
-            {% comment %} {{ form(form.roles) }} {% endcomment %}
+            {# {{ form(form.roles) }} #}
             <button type="submit" class="btn btn-success pull-right">Modifier</button>
         {{ form_end(form) }}
     </div>
