@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block stylesheets %}   
+            {% include "header.html.twig" %}
+        {% endblock %}
+    </head>
+    <body>
+    {% block nav %}
+        {% include 'navbar.html.twig' %}
+    {% endblock %}
+    <header class="masthead" style="background-image: url('assets/img/error.jpg')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h2>Une erreur est survenue!</h2>
+                            <span class="subheading"><i class="fas fa-4x fa-exclamation-triangle error-icon"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        {% block footer %}   
+            {% include "footer.html.twig" %}
+        {% endblock %}
+    </body>
+</html>
