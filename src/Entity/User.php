@@ -43,14 +43,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $email;
 
     /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
      * @ORM\OneToMany(targetEntity=Task::class, mappedBy="user")
      */
     private $tasks;
 
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
+    
     
 
     public function __construct()
