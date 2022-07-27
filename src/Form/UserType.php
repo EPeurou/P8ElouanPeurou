@@ -21,13 +21,10 @@ class UserType extends AbstractType
             ->add('username', TextType::class, ['label' => "Nom d'utilisateur",'attr'=>[
                 'class'=>'form-control w-50',
             ]])
-            ->add('password', RepeatedType::class, [
-                'options' => ['attr' => ['class' => 'form-control w-50']],
-                'type' => PasswordType::class,
-                'invalid_message' => 'Les deux mots de passe doivent correspondre.',
+            ->add('password', PasswordType::class, [
+                'attr' => ['class' => 'form-control w-50'],
                 'required' => true,
-                'first_options'  => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Tapez le mot de passe à nouveau',],
+                'label' => 'Mot de passe',
                 
             ])
             ->add('email', EmailType::class, [
