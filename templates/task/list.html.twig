@@ -3,11 +3,13 @@
 {% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_content.jpg') }}" alt="todo list">{% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-2">
-            <a href="{{ path('task_create') }}" style="margin-bottom:5em;" class="btn btn-info pull-right">Créer une tâche</a>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <div class="row">
+            <div class="col-2">
+                <a href="{{ path('task_create') }}" style="margin-bottom:5em;" class="btn btn-info pull-right">Créer une tâche</a>
+            </div>
         </div>
-    </div>
+    {% endif %}
     <div class="row">
         {% for task in tasks %}
         <div class="col-sm-4 col-lg-4 col-md-4">
