@@ -1,11 +1,17 @@
 <?php
 namespace App\Tests;
 use App\Entity\Task;
+use App\Repository\TaskRepository;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class taskTest extends WebTestCase
 {
+    // /**
+    //  * @var \Doctrine\ORM\EntityManager
+    //  */
+    // private $entityManager;
+
     public function testNewTask()
     {
         $task = static::createClient();
@@ -25,6 +31,10 @@ class taskTest extends WebTestCase
 
     public function testEditTask()
     {
+        // $product = $this->entityManager
+        //     ->getRepository(Task::class)
+        //     ->findOneBy(['id' => '5'])
+        // ;
         $task = static::createClient();
         $crawler = $task->request('POST', '/tasks/5/edit');
         $form = $crawler->selectButton('Modifier')->form( [
@@ -54,7 +64,7 @@ class taskTest extends WebTestCase
     public function testDeleteTask()
     {
         $task = static::createClient();
-        $crawler = $task->request('POST', '/tasks/8/delete');
+        $crawler = $task->request('POST', '/tasks/124/delete');
         $this->assertTrue(TRUE);
         // $this->assertResponseRedirects();
         // $task->followRedirect();    

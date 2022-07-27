@@ -50,7 +50,7 @@ class TaskController extends AbstractController
      */
     public function editAction(Task $task, Request $request, ManagerRegistry $doctrine)
     {
-        $form = $this->createForm(TaskType::class, $task);
+        $form = $this->createForm(TaskType::class, $task); 
 
         $form->handleRequest($request);
 

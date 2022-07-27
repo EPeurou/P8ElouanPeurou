@@ -17,9 +17,9 @@ class userTest extends WebTestCase
         $crawler = $user->request('POST', '/users/create');
         
         $form = $crawler->selectButton('Ajout')->form(
-            [ 'user[username]' => 'test1',
+            [ 'user[username]' => 'testController',
             'user[password]' => 'test',
-            'user[email]' => 'test1@gmail.com',
+            'user[email]' => 'testController@gmail.com',
             'user[roles]' => 'ROLE_ADMIN']
         );
         $user->submit($form);
