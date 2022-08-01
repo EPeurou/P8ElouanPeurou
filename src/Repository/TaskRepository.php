@@ -8,6 +8,7 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedTaskException;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * @method Task|null find($id, $lockMode = null, $lockVersion = null)
@@ -44,6 +45,20 @@ class TaskRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    /**
+    * @return Task[] Returns an array of User objects
+    */
+    
+    public function findTaskLastBy($value)
+    {
+        // $rsm = new ResultSetMapping();
+        // $query = $this->_em->createNativeQuery('DELETE FROM task WHERE id > ?', $rsm);
+        // $query->setParameter(1, $value)
+        $sql = 'DELETE FROM task WHERE id >'.$value;
+        $query = $this->_em->getConnection()->prepare($sql);
+        $users = $query->execute();;
     }
 
     

@@ -26,20 +26,24 @@ class TaskController extends AbstractController
     public function createAction(Request $request, ManagerRegistry $doctrine)
     {
         $user = $this->getUser();
-        $task = new Task();
-        $form = $this->createForm(TaskType::class, $task);
+        if ($user != null){
+            $task = new Task();
+            $form = $this->createForm(TaskType::class, $task);
 
-        $form->handleRequest($request);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $task->setUser($user);
-            $entityManager = $doctrine->getManager();
-            $entityManager->persist($task);
-            $entityManager->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $task->setUser($user);
+                $entityManager = $doctrine->getManager();
+                $entityManager->persist($task);
+                $entityManager->flush();
 
-            $this->addFlash('success', 'La tâche a bien été ajoutée.');
+                $this->addFlash('success', 'La tâche a bien été ajoutée.');
 
-            return $this->redirectToRoute('task_list');
+                return $this->redirectToRoute('task_list');
+            }
+        } else {
+            return $this->redirectToRoute('login');
         }
 
         return $this->render('task/create.html.twig', ['form' => $form->createView()]);
@@ -50,24 +54,29 @@ class TaskController extends AbstractController
      */
     public function editAction(Task $task, Request $request, ManagerRegistry $doctrine)
     {
-        $form = $this->createForm(TaskType::class, $task); 
+        $user = $this->getUser();
+        if ($user != null){
+            $form = $this->createForm(TaskType::class, $task); 
 
-        $form->handleRequest($request);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $doctrine->getManager();
-            $entityManager->persist($task);
-            $entityManager->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $doctrine->getManager();
+                $entityManager->persist($task);
+                $entityManager->flush();
 
-            $this->addFlash('success', 'La tâche a bien été modifiée.');
+                $this->addFlash('success', 'La tâche a bien été modifiée.');
 
-            return $this->redirectToRoute('task_list');
+                return $this->redirectToRoute('task_list');
+            }
+
+            return $this->render('task/edit.html.twig', [
+                'form' => $form->createView(),
+                'task' => $task,
+            ]);
+        } else {
+            return $this->redirectToRoute('login');
         }
-
-        return $this->render('task/edit.html.twig', [
-            'form' => $form->createView(),
-            'task' => $task,
-        ]);
     }
 
     /**
@@ -75,14 +84,19 @@ class TaskController extends AbstractController
      */
     public function toggleTaskAction(Task $task, ManagerRegistry $doctrine)
     {
-        $task->toggle(!$task->isDone());
-        $entityManager = $doctrine->getManager();
-        $entityManager->persist($task);
-        $entityManager->flush();
+        $user = $this->getUser();
+        if ($user != null){
+            $task->toggle(!$task->isDone());
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($task);
+            $entityManager->flush();
 
-        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
 
-        return $this->redirectToRoute('task_list');
+            return $this->redirectToRoute('task_list');
+        } else {
+            return $this->redirectToRoute('login');
+        }
     }
 
     /**
@@ -90,11 +104,22 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(Task $task, ManagerRegistry $doctrine)
     {
-        $entityManager = $doctrine->getManager();
-        $entityManager->remove($task);
-        $entityManager->flush();
-        $this->addFlash('success', 'La tâche a bien été supprimée.');
+        $getTaskUser=$task->getUser();
+        $getTaskUserRoles = $getTaskUser->getRoles();
+        // dd($getTaskUserRoles);
+        $user = $this->getUser();
+        $getRoles=$user->getRoles();
+        // dd($getRoles[0]);
+        if ($user != null && $getRoles[0] == 'ROLE_ADMIN' && $user == $getTaskUser || $user != null && $user == $getTaskUser || $user != null && $getRoles[0] == 'ROLE_ADMIN' && $getTaskUserRoles[0] == 'ROLE_ANON'){
+            // dd('ok');
+            $entityManager = $doctrine->getManager();
+            $entityManager->remove($task);
+            $entityManager->flush();
+            $this->addFlash('success', 'La tâche a bien été supprimée.');
 
-        return $this->redirectToRoute('task_list');
+            return $this->redirectToRoute('task_list');
+        } else {
+            return $this->redirectToRoute('task_list');
+        }
     }
 }

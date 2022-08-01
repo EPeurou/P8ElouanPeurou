@@ -4,6 +4,7 @@ namespace App\Form;
 
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,7 +20,7 @@ class TaskType extends AbstractType
             ->add('content', TextareaType::class, ['label' => "Contenu",'attr'=>[
                 'class'=>'form-control w-50'
             ]])
-            //->add('author') ===> must be the user authenticated
+            // ->add('user',  HiddenType::class)
         ;
     }
 }

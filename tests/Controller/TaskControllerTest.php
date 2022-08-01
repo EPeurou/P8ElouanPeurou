@@ -2,8 +2,11 @@
 namespace App\Tests;
 use App\Entity\Task;
 use App\Repository\TaskRepository;
+use App\Repository\UserRepository;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 
 class taskTest extends WebTestCase
 {
@@ -15,11 +18,13 @@ class taskTest extends WebTestCase
     public function testNewTask()
     {
         $task = static::createClient();
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        $testUser = $userRepository->findOneByUsername('Admin');
+        $task->loginUser($testUser);
         $crawler = $task->request('POST', '/tasks/create');
         $form = $crawler->selectButton('Ajouter')->form( [
             'task[title]' => 'Fabien',
             'task[content]' => 'Some feedback from an automated functional test'
-            // 'task[user]' => 5
         ]);
         $task->submit($form);
         $this->assertTrue(TRUE);
@@ -43,7 +48,15 @@ class taskTest extends WebTestCase
             // 'task[user]' => 5
         ]);
         $task->submit($form);
+        $task = new Task();
+        $task->setTitle('for delete');
+        $task->setContent('test');
+        $task->IsDone(0);
+        $task->setCreatedAt(new DateTime('now'));
         $this->assertTrue(TRUE);
+        $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+        $entityManager->persist($task);
+        $entityManager->flush();
         // $this->assertResponseRedirects();
         // $task->followRedirect();    
         // $this->assertEquals(2,1+1);
@@ -63,8 +76,12 @@ class taskTest extends WebTestCase
 
     public function testDeleteTask()
     {
+        
         $task = static::createClient();
-        $crawler = $task->request('POST', '/tasks/124/delete');
+        $taskRepository = static::getContainer()->get(TaskRepository::class);
+        $testTask = $taskRepository->findOneByTitle('for delete');
+        $testTaskId = $testTask->getId();
+        $crawler = $task->request('POST', '/tasks/'.$testTaskId.'/delete');
         $this->assertTrue(TRUE);
         // $this->assertResponseRedirects();
         // $task->followRedirect();    
