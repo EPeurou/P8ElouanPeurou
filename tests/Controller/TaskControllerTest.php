@@ -11,10 +11,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class taskTest extends WebTestCase
 {
-    // /**
-    //  * @var \Doctrine\ORM\EntityManager
-    //  */
-    // private $entityManager;
 
     public function testNewTask()
     {
@@ -24,70 +20,47 @@ class taskTest extends WebTestCase
         $task->loginUser($testUser);
         $crawler = $task->request('POST', '/tasks/create');
         $form = $crawler->selectButton('Ajouter')->form( [
-            'task[title]' => 'Fabien',
-            'task[content]' => 'Some feedback from an automated functional test'
+            'task[title]' => 'new task',
+            'task[content]' => 'a task'
         ]);
         $task->submit($form);
         $this->assertTrue(TRUE);
-        // $this->assertResponseRedirects();
-        // $task->followRedirect();    
-        // $this->assertEquals(2,1+1);
         
     }
 
     public function testEditTask()
     {
-        // $product = $this->entityManager
-        //     ->getRepository(Task::class)
-        //     ->findOneBy(['id' => '5'])
-        // ;
         $task = static::createClient();
         $userRepository = static::getContainer()->get(UserRepository::class);
         $testUser = $userRepository->findOneByUsername('Admin');
         $task->loginUser($testUser);
-        // $tokenStorage = static::getContainer()->get(TokenStorageInterface::class);
-        // $getUser = $tokenStorage->getToken()->getUser();
-        $crawler = $task->request('POST', '/tasks/5/edit');
+        $taskRepository = static::getContainer()->get(TaskRepository::class);
+        $testTask = $taskRepository->findOneByTitle('first task');
+        $testTaskId = $testTask->getId();
+        $crawler = $task->request('POST', '/tasks/'.$testTaskId.'/edit');
         $form = $crawler->selectButton('Modifier')->form([
-            'task[title]' => 'Fabien2',
+            'task[title]' => 'first task edited',
             'task[content]' => 'Some feedback from an automated functional test2'
-            // 'task[user]' => 5
         ]);
         $task->submit($form);
-        // $task = new Task();
-        // $task->setTitle('for delete');
-        // $task->setContent('test');
-        // $task->IsDone(0);
-        // $task->setUser($testUser);
-        // $task->setCreatedAt(new DateTime('now'));
         $this->assertTrue(TRUE);
-        // $entityManager = static::getContainer()->get(EntityManagerInterface::class);
-        // $entityManager->persist($task);
-        // $entityManager->flush();
-        // $this->assertResponseRedirects();
-        // $task->followRedirect();    
-        // $this->assertEquals(2,1+1);
         
     }
 
-    public function testNewTaskForDelete()
-    {
-        $task = static::createClient();
-        $userRepository = static::getContainer()->get(UserRepository::class);
-        $testUser = $userRepository->findOneByUsername('Admin');
-        $task->loginUser($testUser);
-        $crawler = $task->request('POST', '/tasks/create');
-        $form = $crawler->selectButton('Ajouter')->form( [
-            'task[title]' => 'For delete test',
-            'task[content]' => 'test'
-        ]);
-        $task->submit($form);
-        $this->assertTrue(TRUE);
-        // $this->assertResponseRedirects();
-        // $task->followRedirect();    
-        // $this->assertEquals(2,1+1);
-        
-    }
+    // public function testNewTaskForDelete()
+    // {
+    //     $task = static::createClient();
+    //     $userRepository = static::getContainer()->get(UserRepository::class);
+    //     $testUser = $userRepository->findOneByUsername('Admin');
+    //     $task->loginUser($testUser);
+    //     $crawler = $task->request('POST', '/tasks/create');
+    //     $form = $crawler->selectButton('Ajouter')->form( [
+    //         'task[title]' => 'For delete test',
+    //         'task[content]' => 'test'
+    //     ]);
+    //     $task->submit($form);
+    //     $this->assertTrue(TRUE);        
+    // }
 
 
     public function testToggleTask()
@@ -96,7 +69,10 @@ class taskTest extends WebTestCase
         $userRepository = static::getContainer()->get(UserRepository::class);
         $testUser = $userRepository->findOneByUsername('Admin');
         $task->loginUser($testUser);
-        $crawler = $task->request('POST', '/tasks/5/toggle');
+        $taskRepository = static::getContainer()->get(TaskRepository::class);
+        $testTask = $taskRepository->findOneByTitle('first task edited');
+        $testTaskId = $testTask->getId();
+        $crawler = $task->request('POST', '/tasks/'.$testTaskId.'/toggle');
         $this->assertTrue(TRUE);
         // $this->assertResponseRedirects();
         // $task->followRedirect();    
@@ -106,20 +82,15 @@ class taskTest extends WebTestCase
 
     public function testDeleteTask()
     {
-        
         $task = static::createClient();
         $taskRepository = static::getContainer()->get(TaskRepository::class);
-        $testTask = $taskRepository->findOneByTitle('For delete test');
+        $testTask = $taskRepository->findOneByTitle('second task');
         $testTaskId = $testTask->getId();
         $userRepository = static::getContainer()->get(UserRepository::class);
         $testUser = $userRepository->findOneByUsername('Admin');
         $task->loginUser($testUser);
         $crawler = $task->request('POST', '/tasks/'.$testTaskId.'/delete');
-        $this->assertTrue(TRUE);
-        // $this->assertResponseRedirects();
-        // $task->followRedirect();    
-        // $this->assertEquals(2,1+1);
-        
+        $this->assertTrue(TRUE);        
     }
 
     public function testListTask()

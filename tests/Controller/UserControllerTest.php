@@ -32,11 +32,12 @@ class userTest extends WebTestCase
         $userRepository = static::getContainer()->get(UserRepository::class);
         $testUser = $userRepository->findOneByUsername('Admin');
         $user->loginUser($testUser);
-        $crawler = $user->request('POST', '/users/8/edit');
+        $getUserId = $userRepository->findOneByUsername('Anonyme')->getId();
+        $crawler = $user->request('POST', '/users/'.$getUserId.'/edit');
         $form = $crawler->selectButton('Modifier')->form([
             'user[username]' => 'Fabien',
             'user[password]' => 'test',
-            'user[email]' => 'test1@gmail.com',
+            'user[email]' => 'test@gmail.com',
             'user[roles]' => 'ROLE_USER'
         ]);
         $user->submit($form);

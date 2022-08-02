@@ -8,19 +8,19 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class securityTest extends WebTestCase
 {
-    public function testCleanUser()
-    {
-        $userRepository = static::getContainer()->get(UserRepository::class);
-        $testUser = $userRepository->findUserLastBy(9);
-        $this->assertTrue(TRUE);
-    }
+    // public function testCleanUser()
+    // {
+    //     $userRepository = static::getContainer()->get(UserRepository::class);
+    //     $testUser = $userRepository->findUserLastBy(0);
+    //     $this->assertTrue(TRUE);
+    // }
 
-    public function testCleanTask()
-    {
-        $taskRepository = static::getContainer()->get(TaskRepository::class);
-        $testTask = $taskRepository->findTaskLastBy(5);
-        $this->assertTrue(TRUE);
-    }
+    // public function testCleanTask()
+    // {
+    //     $taskRepository = static::getContainer()->get(TaskRepository::class);
+    //     $testTask = $taskRepository->findTaskLastBy(0);
+    //     $this->assertTrue(TRUE);
+    // }
 
     public function testlogin()
     {
