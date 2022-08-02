@@ -108,9 +108,12 @@ class TaskController extends AbstractController
         $getTaskUserRoles = $getTaskUser->getRoles();
         // dd($getTaskUserRoles);
         $user = $this->getUser();
-        $getRoles=$user->getRoles();
+        $getRoles[] = null;
+        if($user != null){
+            $getRoles=$user->getRoles();
+        }
         // dd($getRoles[0]);
-        if ($user != null && $getRoles[0] == 'ROLE_ADMIN' && $user == $getTaskUser || $user != null && $user == $getTaskUser || $user != null && $getRoles[0] == 'ROLE_ADMIN' && $getTaskUserRoles[0] == 'ROLE_ANON'){
+        if ($getRoles[0] == 'ROLE_ADMIN' && $user == $getTaskUser || $user == $getTaskUser || $getRoles[0] == 'ROLE_ADMIN' && $getTaskUserRoles[0] == 'ROLE_ANON'){
             // dd('ok');
             $entityManager = $doctrine->getManager();
             $entityManager->remove($task);
