@@ -7,7 +7,7 @@ body {
 }
 
 .octicon {
-  margin-right:.25em;
+  margin-right: .25em;
 }
 
 .table-bordered> thead> tr> td {
@@ -128,9 +128,9 @@ svg text {
 }
 
 .scrollbox {
-  height:245px;
-  overflow-x:hidden;
-  overflow-y:scroll;
+  height: 245px;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 table + .structure-heading {
