@@ -72,7 +72,7 @@ class taskTest extends WebTestCase
         $taskRepository = static::getContainer()->get(TaskRepository::class);
         $testTask = $taskRepository->findOneByTitle('first task edited');
         $testTaskId = $testTask->getId();
-        $crawler = $task->request('POST', '/tasks/'.$testTaskId.'/toggle');
+        $task->request('POST', '/tasks/'.$testTaskId.'/toggle');
         $this->assertTrue(TRUE);
         // $this->assertResponseRedirects();
         // $task->followRedirect();    
@@ -89,7 +89,7 @@ class taskTest extends WebTestCase
         $userRepository = static::getContainer()->get(UserRepository::class);
         $testUser = $userRepository->findOneByUsername('Admin');
         $task->loginUser($testUser);
-        $crawler = $task->request('POST', '/tasks/'.$testTaskId.'/delete');
+        $task->request('POST', '/tasks/'.$testTaskId.'/delete');
         $this->assertTrue(TRUE);        
     }
 
