@@ -53,7 +53,7 @@ class securityTest extends WebTestCase
     public function testlogout()
     {
         $user = static::createClient();
-        $crawler = $user->request('POST', 'security/logout');
+        $user->request('POST', 'security/logout');
         $this->assertTrue(TRUE);        
     }
 
