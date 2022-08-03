@@ -25,7 +25,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="login")
      */
-    public function loginAction(Request $request, AuthenticationUtils $authenticationUtils,TranslatorInterface $translatorInterface)
+    public function loginAction(AuthenticationUtils $authenticationUtils,TranslatorInterface $translatorInterface)
     {
         // $authenticationUtils = $this->container->get('security.authentication_utils');
         $user = $this->getUser();
