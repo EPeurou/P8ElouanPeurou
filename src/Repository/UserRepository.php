@@ -10,6 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -24,29 +25,29 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         parent::__construct($registry, User::class);
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
-    public function add(User $entity, bool $flush = true): void
-    {
-        $this->_em->persist($entity);
-        if ($flush) {
-            $this->_em->flush();
-        }
-    }
+    // /**
+    //  * @throws ORMException
+    //  * @throws OptimisticLockException
+    //  */
+    // public function add(User $entity, bool $flush = true): void
+    // {
+    //     $this->_em->persist($entity);
+    //     if ($flush) {
+    //         $this->_em->flush();
+    //     }
+    // }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
-    public function remove(User $entity, bool $flush = true): void
-    {
-        $this->_em->remove($entity);
-        if ($flush) {
-            $this->_em->flush();
-        }
-    }
+    // /**
+    //  * @throws ORMException
+    //  * @throws OptimisticLockException
+    //  */
+    // public function remove(User $entity, bool $flush = true): void
+    // {
+    //     $this->_em->remove($entity);
+    //     if ($flush) {
+    //         $this->_em->flush();
+    //     }
+    // }
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
@@ -62,22 +63,36 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
+    /**
+    * @return User[] Returns an array of User objects
     */
+    
+    // public function findUserLastBy($value)
+    // {
+    //     // return $this->createQueryBuilder('u')
+    //     //     ->andWhere('u.id > :val')
+    //     //     ->setParameter('val', $value)
+    //     //     ->orderBy('u.id', 'DESC')
+    //     //     ->setMaxResults(2)
+    //     //     ->getQuery()
+    //     //     ->getResult()
+    //     // ;
+    //     $rsm = new ResultSetMapping();
+    //     // build rsm here
+
+    //     // $query = $this->_em->createNativeQuery('DELETE FROM user WHERE id > ?', $rsm);
+        
+    //     // $query->setParameter(1, $value);
+        
+    //     // $users = $query->execute();
+    //     $sql = 'DELETE FROM user WHERE id >'.$value;
+    //     $query = $this->_em->getConnection()->prepare($sql);
+    //     $users = $query->execute();
+    //     // dd('test');
+    //     // $this->_em->getConnection()->executeUpdate();
+    // }
+    
+    
 
     /*
     public function findOneBySomeField($value): ?User

@@ -43,14 +43,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $email;
 
     /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
      * @ORM\OneToMany(targetEntity=Task::class, mappedBy="user")
      */
     private $tasks;
 
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
+    
     
 
     public function __construct()
@@ -116,35 +118,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
     }
 
-    /**
-     * @return Collection<int, Task>
-     */
-    public function getTasks(): Collection
-    {
-        return $this->tasks;
-    }
+    // /**
+    //  * @return Collection<int, Task>
+    //  */
+    // public function getTasks(): Collection
+    // {
+    //     return $this->tasks;
+    // }
 
-    public function addTask(Task $task): self
-    {
-        if (!$this->tasks->contains($task)) {
-            $this->tasks[] = $task;
-            $task->setUser($this);
-        }
+    // public function addTask(Task $task): self
+    // {
+    //     if (!$this->tasks->contains($task)) {
+    //         $this->tasks[] = $task;
+    //         $task->setUser($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeTask(Task $task): self
-    {
-        if ($this->tasks->removeElement($task)) {
-            // set the owning side to null (unless already changed)
-            if ($task->getUser() === $this) {
-                $task->setUser(null);
-            }
-        }
+    // public function removeTask(Task $task): self
+    // {
+    //     if ($this->tasks->removeElement($task)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($task->getUser() === $this) {
+    //             $task->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function setRoles(?array $roles): self
     {
