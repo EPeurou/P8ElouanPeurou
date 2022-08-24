@@ -27,15 +27,13 @@ class SecurityController extends AbstractController
      */
     public function loginAction(AuthenticationUtils $authenticationUtils,TranslatorInterface $translatorInterface)
     {
-        // $authenticationUtils = $this->container->get('security.authentication_utils');
         $user = $this->getUser();
         if ($user != null){
-            // dd("ok");
             return $this->redirectToRoute('task_list', [], Response::HTTP_SEE_OTHER);
         }
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-        // $translatedError = $translatorInterface->trans($error);
+
         return $this->render('securityfirst/login.html.twig', array(
             'last_username' => $lastUsername,
             'error'         => $error,
