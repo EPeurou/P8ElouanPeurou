@@ -50,6 +50,7 @@ class AppFixtures extends Fixture
         $manager->persist($task);
         $manager->flush();
 
+        $testUser = $this->userRepository->findOneByUsername('User');
         $task = new Task();
         $task->setTitle('second task');
         $task->setContent('a simple task');

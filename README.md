@@ -22,7 +22,11 @@ Si vous préféré chargé les données dans votre propre base de données, entr
 
     php bin/console doctrine:fixtures:load
 
-Si vous souhaitez également chargé les données dans la base de test, entré la commande suivante:
+Si vous souhaitez également chargé les données dans la base de test, entré les commandes suivantes dans l'ordre:
+
+    php bin/console --env=test doctrine:database:create
+
+    php bin/console --env=test doctrine:schema:create
 
     php bin/console doctrine:fixtures:load --env=test
 
