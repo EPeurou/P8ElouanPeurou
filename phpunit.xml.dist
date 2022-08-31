@@ -29,6 +29,8 @@
         </include>
         <exclude>
             <directory>./src/DataFixtures</directory>
+            <directory>./src/Command</directory>
+            <directory>./src/EventListener</directory>
         </exclude>
     </coverage>
 
