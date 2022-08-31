@@ -50,6 +50,7 @@ class AppFixtures extends Fixture
         $manager->persist($task);
         $manager->flush();
 
+        $testUser = $this->userRepository->findOneByUsername('User');
         $task = new Task();
         $task->setTitle('second task');
         $task->setContent('a simple task');
@@ -62,7 +63,20 @@ class AppFixtures extends Fixture
         $task->setTitle('third task');
         $task->setContent('a simple task');
         $task->IsDone(0);
-        $task->setUser($testUser);
+        $manager->persist($task);
+        $manager->flush();
+
+        $task = new Task();
+        $task->setTitle('fourth task');
+        $task->setContent('a simple task');
+        $task->IsDone(0);
+        $manager->persist($task);
+        $manager->flush();
+
+        $task = new Task();
+        $task->setTitle('fifth task');
+        $task->setContent('a simple task');
+        $task->IsDone(0);
         $manager->persist($task);
         $manager->flush();
     }
