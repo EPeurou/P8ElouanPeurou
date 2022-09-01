@@ -39,7 +39,7 @@ class SetTaskToAnon extends Command
             $output->writeln('Toutes les tâches sans utilisateur vont être associées à l\'utilisateur anonyme.');
             $output->writeln('<bg=green;options=bold>Succès!</>');
         } else {
-            $output->writeln('<bg=yellow;options=bold>toutes les tâches ont un utilisateur.</>');
+            $output->writeln('<bg=yellow;options=bold>Toutes les tâches ont un utilisateur.</>');
         }
         return Command::SUCCESS;
     }

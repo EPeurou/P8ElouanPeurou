@@ -34,7 +34,7 @@ class UserController extends AbstractController
     /**
      * @Route("/users/create", name="user_create")
      */
-    public function createAction(Request $request, UserPasswordHasherInterface $passwordHasher, ManagerRegistry $doctrine)
+    public function createAction(Request $request, UserPasswordHasherInterface $passwordHasher, ManagerRegistry $doctrine,UserRepository $userRepository )
     {
         $currentUser = $this->getUser();
         $getRoles[] = null;
@@ -51,20 +51,26 @@ class UserController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 // $em = $this->getDoctrine()->getManager();
                 $plaintextPassword  = $form->get('password')->getData();
-                // $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
-                $hashedPassword = $passwordHasher->hashPassword(
-                    $user,
-                    $plaintextPassword
-                );
-                $user->setPassword($hashedPassword);
+                $username = $form->get('username')->getData();
+                $testUserName = $userRepository->findOneBy(['username'=>$username]);
 
-                $entityManager = $doctrine->getManager();
-                $entityManager->persist($user);
-                $entityManager->flush();
+                if($testUserName == null){
+                    $hashedPassword = $passwordHasher->hashPassword(
+                        $user,
+                        $plaintextPassword
+                    );
+                    $user->setPassword($hashedPassword);
 
-                $this->addFlash('success', "L'utilisateur a bien été ajouté.");
+                    $entityManager = $doctrine->getManager();
+                    $entityManager->persist($user);
+                    $entityManager->flush();
 
-                return $this->redirectToRoute('login');
+                    $this->addFlash('success', "L'utilisateur a bien été ajouté.");
+
+                    return $this->redirectToRoute('login');
+                } else {
+                    $this->addFlash('error', "Le nom d'utilisateur existe déjà.");
+                }
             }
 
             return $this->render('user/create.html.twig', ['form' => $form->createView()]);
