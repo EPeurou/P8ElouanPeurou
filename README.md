@@ -50,6 +50,13 @@ Si vous souhaitez également chargé les données dans la base de test, tapé le
 
     php bin/console doctrine:fixtures:load --env=test
 
+
+### Consigne d'utilisation
+
+Une commande a été crée pour ratacher les tâches sans utilisateur à l'utilisateur anonyme:
+
+    php bin/console app:settasktoanon
+
 ### Tests PHPUNIT
 
 Pour lancer les tests PHPUNIT entré la ligne suivante en ligne de commande.
