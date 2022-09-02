@@ -31,11 +31,9 @@ Dans le fichier '.env' situé à la racine du projet, vous devrez modifier l'hô
     DATABASE_URL="mysql://utilisateurBase:motDePasseBase@127.0.0.1:3306/nomBase"
 
 
-### Import de la base de données
+### Chargement des données
 
-Pour récupérer la base de données vous pouvez importer le fichier 'p8bdd.sql' (à la racine du projet), dans votre système de base de données afin de récupérer les données de démo du projet.
-
-Si vous préférez charger les données dans votre propre base de données, entrez ces commandes dans l'ordre dans votre terminal au niveau du projet:
+Pour charger les données dans votre base de données, entrez ces commandes dans l'ordre dans votre terminal au niveau du projet:
 
     php bin/console doctrine:migrations:migrate
 
